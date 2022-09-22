@@ -139,6 +139,29 @@ def searchPurchases():
     return print(purchaseslist)
 
 
+# UPDATE FUNCTIONS
+def updateUser(nome, cpf, email, rua, cidade, estado, numero):
+    global mydb
+    mycol = mydb.usuario
+
+    print("\nUSER UPDATE\n---------------------")
+    mycol.update_one({"_id": user.get("_id")}, {"$set": {"nome": nome, "cpf": cpf, "email": email, "endereco": [{"rua": rua, "cidade": cidade, "estado": estado, "numero": numero}]}})
+
+def updateVendor(nome, cpf, email, rua, cidade, estado, numero):
+    global mydb
+    mycol = mydb.vendedor
+
+    print("\nVENDOR UPDATE\n---------------------")
+    mycol.update_one({"_id": vendor.get("_id")}, {"$set": {"nome": nome, "cpf": cpf, "email": email, "endereco": [{"rua": rua, "cidade": cidade, "estado": estado, "numero": numero}]}})
+
+def updateProduct(nome, preco, quantidade, status):
+    global mydb
+    mycol = mydb.produto
+
+    print("\nPRODUCT UPDATE\n---------------------")
+    mycol.update_one({"_id": product.get("_id")}, {"$set": {"nome": nome, "preco": preco, "quantidade": quantidade, "status": status, "vendedor": [{"id": vendor.get("_id"), "nome": vendor.get("nome")}]}})
+
+
 # DELETE FUNCTION
 def deleteUser():
     global mydb
@@ -166,9 +189,9 @@ def deleteProduct():
 
 #findSort()
 #findQuery()
-#findUser("123.123.123.11")
-#findVendor("123.123.123.11")
-#findProduct("Ventilador")
+findUser("123.123.123.11")
+findVendor("292.092.219.11")
+findProduct("Ventilador")
 #insertUser("Tais Salomao", "123.123.123.11", "tais.salomao@gmail.com", "Alameda das Laranjeiras", "Sao Jose dos Campos", "Sao Paulo", "98")
 #insertVendor("Mariana Ayumi", "123.123.123.11", "mariana.ayumi@gmail.com", "Alameda das Laranjeiras", "Sao Jose dos Campos", "Sao Paulo", "98")
 #insertProduct("Ventilador", "19.90", "20", "Disponível")
@@ -180,3 +203,6 @@ def deleteProduct():
 #deleteUser()
 #deleteVendor()
 #deleteProduct()
+#updateUser("Priscila", "292.092.219.11", "priscila@gmail.com", "Rua Uol", "São José dos Campos", "São Paulo", "71")
+#updateVendor("MARIA", "292.092.219.11", "matheus@gmail.com", "Rua Uol", "São José dos Campos", "São Paulo", "71")
+#updateProduct("Cama", "99.99", "2", "Disponível")
