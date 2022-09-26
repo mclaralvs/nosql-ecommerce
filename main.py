@@ -185,24 +185,30 @@ def deleteProduct():
     mycol.delete_one({"_id": product.get("_id")})
 
 
-############# main
-
-#findSort()
-#findQuery()
+# COMMANDS
+## essas funções acham o id do objeto desejado para executar outras funções (create/delete)
 findUser("123.123.123.11")
 findVendor("292.092.219.11")
 findProduct("Ventilador")
-#insertUser("Tais Salomao", "123.123.123.11", "tais.salomao@gmail.com", "Alameda das Laranjeiras", "Sao Jose dos Campos", "Sao Paulo", "98")
-#insertVendor("Mariana Ayumi", "123.123.123.11", "mariana.ayumi@gmail.com", "Alameda das Laranjeiras", "Sao Jose dos Campos", "Sao Paulo", "98")
-#insertProduct("Ventilador", "19.90", "20", "Disponível")
-#insertPurchase("89.90", "Finalizado!", "20/09/2022", "Débito")
-#searchUsers()
-#searchVendors()
-#searchProducts()
-#searchPurchases()
-#deleteUser()
-#deleteVendor()
-#deleteProduct()
-#updateUser("Priscila", "292.092.219.11", "priscila@gmail.com", "Rua Uol", "São José dos Campos", "São Paulo", "71")
-#updateVendor("MARIA", "292.092.219.11", "matheus@gmail.com", "Rua Uol", "São José dos Campos", "São Paulo", "71")
-#updateProduct("Cama", "99.99", "2", "Disponível")
+
+## essas funções são responsáveis pelos inserts 
+insertUser("Tais Salomao", "123.123.123.11", "tais.salomao@gmail.com", "Alameda das Laranjeiras", "Sao Jose dos Campos", "Sao Paulo", "98")
+insertVendor("Mariana Ayumi", "123.123.123.11", "mariana.ayumi@gmail.com", "Alameda das Laranjeiras", "Sao Jose dos Campos", "Sao Paulo", "98")
+insertProduct("Ventilador", "19.90", "20", "Disponível")
+insertPurchase("89.90", "Finalizado!", "20/09/2022", "Débito")
+
+## essas funções são responsáveis pelas listagens 
+searchUsers()
+searchVendors()
+searchProducts()
+searchPurchases()
+
+## essas funções são responsáveis pelos updates
+updateUser("Priscila", "292.092.219.11", "priscila@gmail.com", "Rua Uol", "São José dos Campos", "São Paulo", "71")
+updateVendor("MARIA", "292.092.219.11", "matheus@gmail.com", "Rua Uol", "São José dos Campos", "São Paulo", "71")
+updateProduct("Cama", "99.99", "2", "Disponível")
+
+## essas funções são responsáveis por deletar
+deleteUser()
+deleteVendor()
+deleteProduct()
