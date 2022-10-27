@@ -1,7 +1,7 @@
 import pymongo
 from pymongo.server_api import ServerApi
 
-client = pymongo.MongoClient("mongodb+srv://maria:1234@mclaralvs.ggbjgpw.mongodb.net/mercadolivre")
+client = pymongo.MongoClient("mongodb+srv://maria:<PASSWORD>@mclaralvs.ggbjgpw.mongodb.net/mercadolivre")
 db = client.test
 
 global mydb
@@ -119,11 +119,9 @@ def searchVendors():
 def searchProducts():
     global mydb
     mycol = mydb.produto
-
-    print("\nPRODUCTS SEARCH\n---------------------")
     products = mycol.find({})
     productslist = []
-    for product in products:
+    for product in prod7777777ucts:
         productslist.append(product)
     return print(productslist)
 
