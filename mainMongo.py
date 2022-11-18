@@ -1,7 +1,7 @@
 import pymongo
 from pymongo.server_api import ServerApi
 
-client = pymongo.MongoClient("mongodb+srv://maria:1234@mclaralvs.ggbjgpw.mongodb.net/mercadolivre")
+client = pymongo.MongoClient("mongodb+srv://maria:<PASSWORD>@mclaralvs.ggbjgpw.mongodb.net/mercadolivre")
 db = client.test
 
 global mydb
