@@ -30,13 +30,16 @@ def login(cpf):
 
     user = mycol.find_one(myuser)
 
+    # getting data from redis ✨
     status = dbRedis.hget('user:' + cpf, 'status')
 
+    # checks if user's already logged in ✨
     if (status.decode() == 'logged in'):
         print('User is already logged in')
 
+    # if not, they can log in ✨
     else:
-        dbRedis.hset('user:' + user['cpf'], 'status', 'logged in')  
+        dbRedis.hset('user:' + user['cpf'], 'status', 'logged in')
 
         print(dbRedis.hget('user:' + user['cpf'], 'status'))
 
@@ -50,13 +53,16 @@ def logout(cpf):
 
     user = mycol.find_one(myuser)
 
+    # getting data from redis ✨
     status = dbRedis.hget('user:' + cpf, 'status')
 
+    # checks if user's in fact logged in so they can log out ✨
     if (status.decode() == 'logged in'):
         dbRedis.hset('user:' + cpf, 'status', 'logged out')
 
         print(dbRedis.hget('user:' + cpf, 'status'))
 
+    # if not, they can't log out ✨
     else:
         print('User is already logged out')
 
@@ -67,9 +73,16 @@ def changePrice(id, price):
 
     product = mycol.find_one(ObjectId(id))
 
-    dbRedis.hset('product:' + id, 'preco', price)  
+    # sets the new price on redis ✨
+    dbRedis.hset('product:' + id, 'preco', price)
 
-    print(dbRedis.hget('product:' + id, 'preco')) 
+    # updates the data on mongodb ✨
+    mycol.update_one({"_id": ObjectId(id)}, {"$set": {
+        "preco": json.loads(dbRedis.hget("product:" + id, 'preco')),
+    }}, upsert=True)
+
+    print('Price Updated ✨')
+    print(dbRedis.hget('product:' + id, 'preco'))
 
 # FUNCTION: change product status ✨
 def changeStatus(id, status):
@@ -78,18 +91,25 @@ def changeStatus(id, status):
 
     product = mycol.find_one(ObjectId(id))
 
-    dbRedis.hset('productStatus:' + id, 'status', status)  
+    # sets the new status on redis ✨
+    dbRedis.hset('productStatus:' + id, 'status', status)
 
-    print(dbRedis.hget('productStatus:' + id, 'status')) 
+    # updates the status on mongodb ✨
+    mycol.update_one({"_id": ObjectId(id)}, {"$set": {
+        "status": dbRedis.hget("productStatus:" + id, str('status')).decode(),
+    }}, upsert=True)
+
+    print('Status Updated ✨')
+    print(dbRedis.hget('productStatus:' + id, 'status'))
+
 
 # commands ✨
-
-## login commands ☁
+# login commands ☁
 login("123.123.123.11")
 logout("123.123.123.11")
 
-## change product price command ☁
-changePrice("632cdccb212e49d773492276", 256.64)
+# change product price command ☁
+changePrice("6377fdd45498906bad49f4e4", 256.64)
 
-## change product status command ☁
-changeStatus("632cdccb212e49d773492276", 'Indisponivel')
+# change product status command ☁
+changeStatus("6377fdeb9ad4153e292d70ae", "Indisponivel")
