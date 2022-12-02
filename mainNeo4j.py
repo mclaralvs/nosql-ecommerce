@@ -131,7 +131,7 @@ class App:
 
     def deleteUser(self):
         with self.driver.session(database="neo4j") as session:
-            session.read_transaction(self._deleteUser)
+            session.write_transaction(self._deleteUser)
 
     @staticmethod
     def _deleteUser(db):
@@ -262,7 +262,7 @@ class App:
     # delete ☁
     def deleteVendor(self):
         with self.driver.session(database="neo4j") as session:
-            session.read_transaction(self._deleteVendor)
+            session.write_transaction(self._deleteVendor)
 
     @staticmethod
     def _deleteVendor(db):
@@ -384,7 +384,7 @@ class App:
     # delete ☁
     def deleteProduct(self):
         with self.driver.session(database="neo4j") as session:
-            session.read_transaction(self._deleteProduct)
+            session.write_transaction(self._deleteProduct)
     
     @staticmethod
     def _deleteProduct(db):
