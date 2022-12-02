@@ -25,11 +25,11 @@ class App:
         )
 
         nome_user = input("Insert the user's name: ")
-        email_user = input("Insert the user's email: "),
-        cpf_user = input("Insert the user's document number: "),
-        rua_user = input("Insert the user's street: "),
-        cidade_user = input("Insert the user's city: "),
-        estado_user = input("Insert the user's state: "),
+        email_user = input("Insert the user's email: ")
+        cpf_user = input("Insert the user's document number: ")
+        rua_user = input("Insert the user's street: ")
+        cidade_user = input("Insert the user's city: ")
+        estado_user = input("Insert the user's state: ")
         numero_user = input("Insert the user's house number: ")
 
         result = db.run(query,
@@ -37,7 +37,7 @@ class App:
                         email_user=email_user,
                         cpf_user=cpf_user,
                         rua_user=rua_user,
-                        cidad_user=cidade_user,
+                        cidade_user=cidade_user,
                         estado_user=estado_user,
                         numero_user=numero_user
                         )
@@ -58,11 +58,11 @@ class App:
         )
 
         nome_vendor = input("Insert the vendor's name: ")
-        email_vendor = input("Insert the vendor's email: "),
-        cpf_vendor = input("Insert the vendor's document number: "),
-        rua_vendor = input("Insert the vendor's street: "),
-        cidade_vendor = input("Insert the vendor's city: "),
-        estado_vendor = input("Insert the vendor's state: "),
+        email_vendor = input("Insert the vendor's email: ")
+        cpf_vendor = input("Insert the vendor's document number: ")
+        rua_vendor = input("Insert the vendor's street: ")
+        cidade_vendor = input("Insert the vendor's city: ")
+        estado_vendor = input("Insert the vendor's state: ")
         numero_vendor = input("Insert the vendor's house number: ")
 
         result = db.run(query,
@@ -87,10 +87,9 @@ class App:
     @staticmethod
     def _createProduct(db):
         query = (
-            "CREATE (object:product { nome: $nome_product, id: $id_product, preco: $preco_product, quantidade: $quantidade_product, status: $status_product, cpfVendor: $cpf_vendor })"
+            "CREATE (object:product { nome: $nome_product, preco: $preco_product, quantidade: $quantidade_product, status: $status_product, cpfVendor: $cpf_vendor })"
         )
 
-        id_product = input("Insert the products's id: ")
         nome_product = input("Insert the products's name: ")
         preco_product = input("Insert the products's price: ")
         quantidade_product = input("Insert the products's quantity: ")
@@ -98,7 +97,6 @@ class App:
         cpf_vendor = input("Insert the vendor's document number: ")
 
         result = db.run(query,
-                        id_product=id_product,
                         nome_product=nome_product,
                         preco_product=preco_product,
                         quantidade_product=quantidade_product,
@@ -106,22 +104,21 @@ class App:
                         cpf_vendor=cpf_vendor
                         )
 
-        return [{"object": row["object"]["id"]["nome"]["preco"]["quantidade"]["status"]["cpfVendor"]}
+        return [{"object": row["object"]["nome"]["preco"]["quantidade"]["status"]["cpfVendor"]}
                 for row in result]
 
     # PURCHASE FUNCTIONS ✨
     # create ☁
     def createPurchase(self):
         with self.driver.session(database="neo4j") as session:
-            session.execute_write(self._createProduct)
+            session.execute_write(self._createPurchase)
 
     @staticmethod
     def _createPurchase(db):
         query = (
-            "CREATE (object:purchase { id: $id_purchase, status: $status_purchase, formaPagamento: $forma_pagamento, idProduct: $id_product, quantidade: $quantidade_product, cpfVendor: $cpf_vendor, cpfUser: $cpf_user })"
+            "CREATE (object:purchase { status: $status_purchase, formaPagamento: $forma_pagamento, idProduct: $id_product, quantidade: $quantidade_product, cpfVendor: $cpf_vendor, cpfUser: $cpf_user })"
         )
 
-        id_purchase = input("Insert the purchase's id: ")
         status_purchase = input("Insert the purchase's status: ")
         forma_pagamento = input("Insert the purchase's payment method: ")
         id_product = input("Insert the products's id: ")
@@ -130,7 +127,6 @@ class App:
         cpf_user = input("Insert the user's document number")
 
         result = db.run(query,
-                        id_purchase=id_purchase,
                         status_purchase=status_purchase,
                         forma_pagamento=forma_pagamento,
                         id_product=id_product,
@@ -139,7 +135,7 @@ class App:
                         cpf_user=cpf_user
                         )
 
-        return [{"object": row["object"]["id"]["status"]["formaPagamento"]["idProduct"]["quantidade"]["cpfVendor"]["cpfUser"]}
+        return [{"object": row["object"]["status"]["formaPagamento"]["idProduct"]["quantidade"]["cpfVendor"]["cpfUser"]}
                 for row in result]
 
 
@@ -152,12 +148,15 @@ if __name__ == "__main__":
 
     # FUNCTIONS ✨
     # user ☁
-    app.createUser()
+    #app.createUser()
 
     # vendor ☁
-    app.createVendor()
+    #app.createVendor()
 
     # product ☁
-    app.createProduct()
+    #app.createProduct()
+        
+    # purchase ☁
+    app.createPurchase()
 
     app.close()
