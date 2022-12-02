@@ -66,7 +66,7 @@ class App:
     def readUser(self):
         with self.driver.session(database="neo4j") as session:
             session.read_transaction(self._readUser)
-
+    
     @staticmethod
     def _readUser(db):
         print("\nREAD USER BY DOCUMENT NUMBER ✨")
@@ -101,27 +101,20 @@ class App:
                 6 - State
                 7 - House number
             ''')
-
+        
         option = input("Insert the number of the option: ")
 
         while int(option) < 1 or int(option) > 7:
             print("Invalid option.")
             option = input("Insert the number of the option: ")
 
-        if option == "1":
-            option = "nome"
-        elif option == "2":
-            option = "email"
-        elif option == "3":
-            option = "cpf"
-        elif option == "4":
-            option = "rua"
-        elif option == "5":
-            option = "cidade"
-        elif option == "6":
-            option = "estado"
-        elif option == "7":
-            option = "numero"
+        if option == "1": option = "nome"
+        elif option == "2": option = "email"
+        elif option == "3": option = "cpf"
+        elif option == "4": option = "rua"
+        elif option == "5": option = "cidade"
+        elif option == "6": option = "estado"
+        elif option == "7": option = "numero"
 
         new_value = input("Insert the new value: ")
 
@@ -238,27 +231,20 @@ class App:
                 6 - State
                 7 - House number
             ''')
-
+        
         option = input("Insert the number of the option: ")
 
         while int(option) < 1 or int(option) > 7:
             print("Invalid option.")
             option = input("Insert the number of the option: ")
 
-        if option == "1":
-            option = "nome"
-        elif option == "2":
-            option = "email"
-        elif option == "3":
-            option = "cpf"
-        elif option == "4":
-            option = "rua"
-        elif option == "5":
-            option = "cidade"
-        elif option == "6":
-            option = "estado"
-        elif option == "7":
-            option = "numero"
+        if option == "1": option = "nome"
+        elif option == "2": option = "email"
+        elif option == "3": option = "cpf"
+        elif option == "4": option = "rua"
+        elif option == "5": option = "cidade"
+        elif option == "6": option = "estado"
+        elif option == "7": option = "numero"
 
         new_value = input("Insert the new value: ")
 
@@ -370,21 +356,17 @@ class App:
                 3 - Quantidade
                 4 - Status
             ''')
-
+        
         option = input("Insert the number of the option: ")
 
         while int(option) < 1 or int(option) > 4:
             print("Invalid option.")
             option = input("Insert the number of the option: ")
 
-        if option == "1":
-            option = "nome"
-        elif option == "2":
-            option = "preco"
-        elif option == "3":
-            option = "quantidade"
-        elif option == "4":
-            option = "status"
+        if option == "1": option = "nome"
+        elif option == "2": option = "preco"
+        elif option == "3": option = "quantidade"
+        elif option == "4": option = "status"
 
         new_value = input("Insert the new value: ")
 
@@ -403,7 +385,7 @@ class App:
     def deleteProduct(self):
         with self.driver.session(database="neo4j") as session:
             session.read_transaction(self._deleteProduct)
-
+    
     @staticmethod
     def _deleteProduct(db):
         print("\nDELETE PRODUCT ✨")
@@ -484,8 +466,46 @@ class App:
         return [print([row]) for row in result]
 
     # update ☁
-
     def updatePurchase(self):
+        with self.driver.session(database="neo4j") as session:
+            session.execute_write(self._updatePurchase)
+
+    @staticmethod
+    def _updatePurchase(db):
+        print("\nUPDATE PURCHASE ✨")
+
+        id_purchase = input("Insert the purchase's id: ")
+
+        print('''\nWhat do you want to update?\n
+                1 - Payment method
+                2 - Quantity
+                3 - Status
+            ''')
+        
+        option = input("Insert the number of the option: ")
+
+        while int(option) < 1 or int(option) > 3:
+            print("Invalid option.")
+            option = input("Insert the number of the option: ")
+
+        if option == "1": option = "formaPagamento"
+        elif option == "2": option = "quantidade"
+        elif option == "3": option = "status"
+
+        new_value = input("Insert the new value: ")
+
+        query = (
+            "MATCH (p:purchase) WHERE p.id = $id_purchase SET p." + option +" = $new_value"
+        )
+
+        db.run(query,
+                id_purchase=id_purchase, 
+                option=option,
+                new_value=new_value
+            )
+
+    # RELATIONSHIP FUNCTIONS ✨
+    def createRelationshipVendorProduct(self):
         with self.driver.session(database="neo4j") as session:
             session.execute_write(self._updatePurchase)
 
