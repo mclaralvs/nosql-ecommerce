@@ -66,7 +66,7 @@ class App:
     def readUser(self):
         with self.driver.session(database="neo4j") as session:
             session.read_transaction(self._readUser)
-
+    
     @staticmethod
     def _readUser(db):
         print("\nREAD USER BY DOCUMENT NUMBER ✨")
@@ -80,6 +80,67 @@ class App:
                         )
 
         return [print([row]) for row in result]
+
+    # update ☁
+    def updateUser(self):
+        with self.driver.session(database="neo4j") as session:
+            session.execute_write(self._updateUser)
+
+    @staticmethod
+    def _updateUser(db):
+        print("\nUPDATE USER ✨")
+
+        cpf_user = input("Insert the user's document number: ")
+
+        print('''\nWhat do you want to update?\n
+                1 - Name
+                2 - Email
+                3 - Document number
+                4 - Street
+                5 - City
+                6 - State
+                7 - House number
+            ''')
+        
+        option = input("Insert the number of the option: ")
+
+        while int(option) < 1 or int(option) > 7:
+            print("Invalid option.")
+            option = input("Insert the number of the option: ")
+
+        if option == "1": option = "nome"
+        elif option == "2": option = "email"
+        elif option == "3": option = "cpf"
+        elif option == "4": option = "rua"
+        elif option == "5": option = "cidade"
+        elif option == "6": option = "estado"
+        elif option == "7": option = "numero"
+
+        new_value = input("Insert the new value: ")
+
+        query = (
+            "MATCH (u:user) WHERE u.cpf = $cpf_user SET u." + option +" = $new_value"
+        )
+
+        db.run(query,
+                cpf_user=cpf_user, 
+                option=option,
+                new_value=new_value
+            )
+
+    def deleteUser(self):
+        with self.driver.session(database="neo4j") as session:
+            session.read_transaction(self._deleteUser)
+    
+    @staticmethod
+    def _deleteUser(db):
+        print("\nDELETE USER ✨")
+
+        cpf_user = input("Insert the user's document number: ")
+
+        query = "MATCH (u:user) WHERE u.cpf = $cpf_user DELETE u"
+
+        db.run(query, cpf_user=cpf_user)
 
     # VENDOR FUNCTIONS ✨
     # create ☁
@@ -148,6 +209,68 @@ class App:
 
         return [print([row]) for row in result]
 
+    # update ☁
+    def updateVendor(self):
+        with self.driver.session(database="neo4j") as session:
+            session.execute_write(self._updateVendor)
+
+    @staticmethod
+    def _updateVendor(db):
+        print("\nUPDATE VENDOR ✨")
+
+        cpf_vendor = input("Insert the vendor's document number: ")
+
+        print('''\nWhat do you want to update?\n
+                1 - Name
+                2 - Email
+                3 - Document number
+                4 - Street
+                5 - City
+                6 - State
+                7 - House number
+            ''')
+        
+        option = input("Insert the number of the option: ")
+
+        while int(option) < 1 or int(option) > 7:
+            print("Invalid option.")
+            option = input("Insert the number of the option: ")
+
+        if option == "1": option = "nome"
+        elif option == "2": option = "email"
+        elif option == "3": option = "cpf"
+        elif option == "4": option = "rua"
+        elif option == "5": option = "cidade"
+        elif option == "6": option = "estado"
+        elif option == "7": option = "numero"
+
+        new_value = input("Insert the new value: ")
+
+        query = (
+            "MATCH (v:vendor) WHERE v.cpf = $cpf_vendor SET v." + option +" = $new_value"
+        )
+
+        db.run(query,
+                cpf_vendor=cpf_vendor, 
+                option=option,
+                new_value=new_value
+            )
+
+    # delete ☁
+    def deleteVendor(self):
+        with self.driver.session(database="neo4j") as session:
+            session.read_transaction(self._deleteVendor)
+    
+    @staticmethod
+    def _deleteVendor(db):
+        print("\nDELETE VENDOR ✨")
+
+        cpf_vendor = input("Insert the vendor's document number: ")
+
+        query = "MATCH (v:vendor) WHERE v.cpf = $cpf_vendor DELETE v"
+
+        db.run(query, cpf_vendor=cpf_vendor)
+
     # PRODUCT FUNCTIONS ✨
     # create ☁
     def createProduct(self):
@@ -212,6 +335,62 @@ class App:
 
         return [print([row]) for row in result]
 
+    # update ☁
+    def updateProduct(self):
+        with self.driver.session(database="neo4j") as session:
+            session.execute_write(self._updateProduct)
+
+    @staticmethod
+    def _updateProduct(db):
+        print("\nUPDATE PRODUCT ✨")
+
+        name_product = input("Insert the product's name: ")
+
+        print('''\nWhat do you want to update?\n
+                1 - Name
+                2 - Preco
+                3 - Quantidade
+                4 - Status
+            ''')
+        
+        option = input("Insert the number of the option: ")
+
+        while int(option) < 1 or int(option) > 4:
+            print("Invalid option.")
+            option = input("Insert the number of the option: ")
+
+        if option == "1": option = "nome"
+        elif option == "2": option = "preco"
+        elif option == "3": option = "quantidade"
+        elif option == "4": option = "status"
+
+        new_value = input("Insert the new value: ")
+
+        query = (
+            "MATCH (p:product) WHERE p.nome = $name_product SET p." + option +" = $new_value"
+        )
+
+        db.run(query,
+                name_product=name_product, 
+                option=option,
+                new_value=new_value
+            )
+
+    # delete ☁
+    def deleteProduct(self):
+        with self.driver.session(database="neo4j") as session:
+            session.read_transaction(self._deleteProduct)
+    
+    @staticmethod
+    def _deleteProduct(db):
+        print("\nDELETE PRODUCT ✨")
+
+        name_product = input("Insert the product's name: ")
+
+        query = "MATCH (p:product) WHERE p.nome = $name_product DELETE p"
+
+        db.run(query, name_product=name_product)
+
     # PURCHASE FUNCTIONS ✨
     # create ☁
     def createPurchase(self):
@@ -223,9 +402,10 @@ class App:
         print("\nCREATE PURCHASE ✨")
 
         query = (
-            "CREATE (object:purchase { status: $status_purchase, formaPagamento: $forma_pagamento, idProduct: $id_product, quantidade: $quantidade_product, cpfVendor: $cpf_vendor, cpfUser: $cpf_user })"
+            "CREATE (object:purchase { id: $id_purchase, status: $status_purchase, formaPagamento: $forma_pagamento, idProduct: $id_product, quantidade: $quantidade_product, cpfVendor: $cpf_vendor, cpfUser: $cpf_user })"
         )
 
+        id_purchase = input("Insert the purchase's id: ")
         status_purchase = input("Insert the purchase's status: ")
         forma_pagamento = input("Insert the purchase's payment method: ")
         id_product = input("Insert the products's id: ")
@@ -234,6 +414,7 @@ class App:
         cpf_user = input("Insert the user's document number")
 
         result = db.run(query,
+                        id_purchase=id_purchase,
                         status_purchase=status_purchase,
                         forma_pagamento=forma_pagamento,
                         id_product=id_product,
@@ -242,7 +423,7 @@ class App:
                         cpf_user=cpf_user
                         )
 
-        return [{"object": row["object"]["status"]["formaPagamento"]["idProduct"]["quantidade"]["cpfVendor"]["cpfUser"]}
+        return [{"object": row["object"]["id"]["status"]["formaPagamento"]["idProduct"]["quantidade"]["cpfVendor"]["cpfUser"]}
                 for row in result]
 
     # read ☁
@@ -278,6 +459,46 @@ class App:
 
         return [print([row]) for row in result]
 
+    
+    # update ☁
+    def updatePurchase(self):
+        with self.driver.session(database="neo4j") as session:
+            session.execute_write(self._updatePurchase)
+
+    @staticmethod
+    def _updatePurchase(db):
+        print("\nUPDATE PURCHASE ✨")
+
+        id_purchase = input("Insert the purchase's id: ")
+
+        print('''\nWhat do you want to update?\n
+                1 - Payment method
+                2 - Quantity
+                3 - Status
+            ''')
+        
+        option = input("Insert the number of the option: ")
+
+        while int(option) < 1 or int(option) > 3:
+            print("Invalid option.")
+            option = input("Insert the number of the option: ")
+
+        if option == "1": option = "formaPagamento"
+        elif option == "2": option = "quantidade"
+        elif option == "3": option = "status"
+
+        new_value = input("Insert the new value: ")
+
+        query = (
+            "MATCH (p:purchase) WHERE p.id = $id_purchase SET p." + option +" = $new_value"
+        )
+
+        db.run(query,
+                id_purchase=id_purchase, 
+                option=option,
+                new_value=new_value
+            )
+
     # RELATIONSHIP FUNCTIONS ✨
     def createRelationshipVendorProduct(self):
         with self.driver.session(database="neo4j") as session:
@@ -309,21 +530,28 @@ if __name__ == "__main__":
     #app.createUser()
     #app.readUsers()
     #app.readUser()
+    #app.updateUser()
+    #app.deleteUser()
 
     # vendor ☁
     #app.createVendor()
     #app.readVendors()
     #app.readVendor()
+    #app.updateVendor()
+    #app.deleteVendor()
 
     # product ☁
     #app.createProduct()
     #app.readProducts()
     #app.readProduct()
+    #app.updateProduct()
+    #app.deleteProduct()
         
     # purchase ☁
     #app.createPurchase()
     #app.readPurchases()
     #app.readPurchase()
+    #app.updatePurchase()
 
     # relationships ☁
     #app.createRelationshipVendorProduct()
