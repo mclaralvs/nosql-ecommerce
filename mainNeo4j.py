@@ -408,11 +408,12 @@ class App:
         print("\nCREATE PURCHASE ✨")
 
         query = (
-            "CREATE (object:purchase { id: $id_purchase, status: $status_purchase, formaPagamento: $forma_pagamento, nomeProduct: $nome_product, quantidade: $quantidade_product, cpfVendor: $cpf_vendor, cpfUser: $cpf_user })"
+            "CREATE (object:purchase { id: $id_purchase, status: $status_purchase, valor: $valor_purchase, formaPagamento: $forma_pagamento, nomeProduct: $nome_product, quantidade: $quantidade_product, cpfVendor: $cpf_vendor, cpfUser: $cpf_user })"
         )
 
         id_purchase = input("Insert the purchase's id: ")
         status_purchase = input("Insert the purchase's status: ")
+        valor_purchase = input("Insert the purchase's total value: ")
         forma_pagamento = input("Insert the purchase's payment method: ")
         nome_product = input("Insert the products's nome: ")
         quantidade_product = input("Insert the products's quantity: ")
@@ -425,11 +426,12 @@ class App:
                         forma_pagamento=forma_pagamento,
                         nome_product=nome_product,
                         quantidade_product=quantidade_product,
+                        valor_purchase=valor_purchase,
                         cpf_vendor=cpf_vendor,
                         cpf_user=cpf_user
                         )
 
-        return [{"object": row["object"]["id"]["status"]["formaPagamento"]["nomeProduct"]["quantidade"]["cpfVendor"]["cpfUser"]}
+        return [{"object": row["object"]["id"]["status"]['valor']["formaPagamento"]["nomeProduct"]["quantidade"]["cpfVendor"]["cpfUser"]}
                 for row in result]
 
     # read ☁
@@ -480,17 +482,19 @@ class App:
                 1 - Payment method
                 2 - Quantity
                 3 - Status
+                4 - Total value
             ''')
         
         option = input("Insert the number of the option: ")
 
-        while int(option) < 1 or int(option) > 3:
+        while int(option) < 1 or int(option) > 4:
             print("Invalid option.")
             option = input("Insert the number of the option: ")
 
         if option == "1": option = "formaPagamento"
         elif option == "2": option = "quantidade"
         elif option == "3": option = "status"
+        elif option == "4": option = "valor"
 
         new_value = input("Insert the new value: ")
 
@@ -503,50 +507,6 @@ class App:
                 option=option,
                 new_value=new_value
             )
-
-    # RELATIONSHIP FUNCTIONS ✨
-    def createRelationshipVendorProduct(self):
-        with self.driver.session(database="neo4j") as session:
-            session.execute_write(self._updatePurchase)
-
-    @staticmethod
-    def _updatePurchase(db):
-        print("\nUPDATE PURCHASE ✨")
-
-        id_purchase = input("Insert the purchase's id: ")
-
-        print('''\nWhat do you want to update?\n
-                1 - Payment method
-                2 - Quantity
-                3 - Status
-            ''')
-
-        option = input("Insert the number of the option: ")
-
-        while int(option) < 1 or int(option) > 3:
-            print("Invalid option.")
-            option = input("Insert the number of the option: ")
-
-        if option == "1":
-            option = "formaPagamento"
-        elif option == "2":
-            option = "quantidade"
-        elif option == "3":
-            option = "status"
-
-        new_value = input("Insert the new value: ")
-
-        query = (
-            "MATCH (p:purchase) WHERE p.id = $id_purchase SET p." +
-            option + " = $new_value"
-        )
-
-        db.run(query,
-               id_purchase=id_purchase,
-               option=option,
-               new_value=new_value
-               )
-
 
     # RELATIONSHIP FUNCTIONS ✨
     # vendor - product ☁
@@ -642,7 +602,7 @@ if __name__ == "__main__":
     # app.createPurchase()
     # app.readPurchases()
     # app.readPurchase()
-    # app.updatePurchase()
+    app.updatePurchase()
 
     # relationships ☁
     # app.vendorProduct()
